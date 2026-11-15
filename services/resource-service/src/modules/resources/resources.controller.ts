@@ -1,7 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ResourcesRepository } from './resources.repository';
 import { CorrelationId } from '../../common/decorators/correlation-id.decorator';
-import { ResourceCategory } from '@prisma/client';
+import { ResourceCategory } from '../../database/generated/client';
 
 @Controller('resources')
 export class ResourcesController {

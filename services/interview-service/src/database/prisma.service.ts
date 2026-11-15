@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from './generated/client';
 import { createServiceLogger } from '@system-atlas/logger';
 
 const logger = createServiceLogger({ serviceName: 'prisma-client' });

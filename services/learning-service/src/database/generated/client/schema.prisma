@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/database/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum DifficultyLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+model Topic {
+  id          String   @id @default(uuid()) @db.Uuid
+  slug        String   @unique
+  title       String
+  description String
+  order       Int      @default(0)
+  icon        String?
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  lessons Lesson[]
+
+  @@index([slug])
+  @@index([order])
+  @@map("topics")
+}
+
+model Lesson {
+  id               String          @id @default(uuid()) @db.Uuid
+  topicId          String          @db.Uuid
+  topic            Topic           @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  slug             String          @unique
+  title            String
+  description      String
+  contentMarkdown  String          @db.Text
+  difficulty       DifficultyLevel @default(BEGINNER)
+  estimatedMinutes Int             @default(15)
+  order            Int             @default(0)
+  isPublished      Boolean         @default(true)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  @@index([topicId, order])
+  @@index([slug])
+  @@map("lessons")
+}

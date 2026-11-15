@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Headers, UnauthorizedException } from '@nestjs/common';
 import { ProgressRepository } from './progress.repository';
 import { CorrelationId } from '../../common/decorators/correlation-id.decorator';
-import { ProgressStatus } from '@prisma/client';
+import { ProgressStatus } from '../../database/generated/client';
 
 @Controller('progress')
 export class ProgressController {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
-import { LessonProgress, Bookmark, LearningStats, ProgressStatus } from '@prisma/client';
+import { LessonProgress, Bookmark, LearningStats, ProgressStatus } from '../../database/generated/client';
 
 @Injectable()
 export class ProgressRepository {

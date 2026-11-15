@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/database/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProgressStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+model LessonProgress {
+  id               String         @id @default(uuid()) @db.Uuid
+  userId           String         @db.Uuid
+  lessonId         String         @db.Uuid
+  status           ProgressStatus @default(NOT_STARTED)
+  completedAt      DateTime?
+  timeSpentSeconds Int            @default(0)
+  lastAccessedAt   DateTime       @default(now())
+
+  @@unique([userId, lessonId])
+  @@index([userId, status])
+  @@map("lesson_progress")
+}
+
+model Bookmark {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  lessonId  String   @db.Uuid
+  createdAt DateTime @default(now())
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@map("bookmarks")
+}
+
+model LearningStats {
+  id                    String    @id @default(uuid()) @db.Uuid
+  userId                String    @unique @db.Uuid
+  totalLessonsCompleted Int       @default(0)
+  totalMinutesSpent     Int       @default(0)
+  currentStreakDays     Int       @default(0)
+  longestStreakDays     Int       @default(0)
+  lastActivityDate      DateTime?
+
+  @@map("learning_stats")
+}
