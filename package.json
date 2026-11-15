@@ -9,7 +9,8 @@
   },
   "packageManager": "pnpm@9.15.0",
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --concurrency 20",
+    "dev:core": "turbo run dev --concurrency 10 --filter=@system-atlas/web --filter=@system-atlas/api-gateway --filter=@system-atlas/auth-service --filter=@system-atlas/learning-service",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
