@@ -1,0 +1,264 @@
+version: "3.9"
+
+networks:
+  system-atlas-net:
+    driver: bridge
+
+volumes:
+  atlas_postgres_data:
+  atlas_redis_data:
+
+services:
+  # ───────────── Core Infrastructure ─────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: atlas-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: atlas
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-atlas_dev_password}
+      POSTGRES_DB: atlas
+    ports:
+      - "5432:5432"
+    volumes:
+      - atlas_postgres_data:/var/lib/postgresql/data
+      - ./infrastructure/docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - system-atlas-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U atlas -d atlas"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  redis:
+    image: redis:7-alpine
+    container_name: atlas-redis
+    restart: unless-stopped
+    command: >
+      redis-server
+      --requirepass ${REDIS_PASSWORD:-atlas_dev_redis}
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - atlas_redis_data:/data
+    networks:
+      - system-atlas-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-atlas_dev_redis}", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ───────────── Edge / Entry Point ─────────────
+  api-gateway:
+    build:
+      context: .
+      dockerfile: services/api-gateway/Dockerfile
+    container_name: atlas-api-gateway
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    env_file:
+      - services/api-gateway/.env.example
+    environment:
+      PORT: 3001
+      REDIS_HOST: redis
+      AUTH_SERVICE_URL: http://auth-service:3002
+      LEARNING_SERVICE_URL: http://learning-service:3003
+      PROGRESS_SERVICE_URL: http://progress-service:3004
+      PLAYGROUND_SERVICE_URL: http://playground-service:3005
+      INTERVIEW_SERVICE_URL: http://interview-service:3006
+      RESOURCE_SERVICE_URL: http://resource-service:3007
+      ORGANIZATION_SERVICE_URL: http://organization-service:3008
+      NOTIFICATION_SERVICE_URL: http://notification-service:3009
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - system-atlas-net
+
+  # ───────────── Domain Services ─────────────
+  auth-service:
+    build:
+      context: .
+      dockerfile: services/auth-service/Dockerfile
+    container_name: atlas-auth-service
+    restart: unless-stopped
+    ports:
+      - "3002:3002"
+    env_file:
+      - services/auth-service/.env.example
+    environment:
+      PORT: 3002
+      DATABASE_URL: postgresql://auth_user:auth_dev_pwd@postgres:5432/atlas?schema=auth_service
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - system-atlas-net
+
+  learning-service:
+    build:
+      context: .
+      dockerfile: services/learning-service/Dockerfile
+    container_name: atlas-learning-service
+    restart: unless-stopped
+    ports:
+      - "3003:3003"
+    env_file:
+      - services/learning-service/.env.example
+    environment:
+      PORT: 3003
+      DATABASE_URL: postgresql://learning_user:learning_dev_pwd@postgres:5432/atlas?schema=learning_service
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - system-atlas-net
+
+  progress-service:
+    build:
+      context: .
+      dockerfile: services/progress-service/Dockerfile
+    container_name: atlas-progress-service
+    restart: unless-stopped
+    ports:
+      - "3004:3004"
+    env_file:
+      - services/progress-service/.env.example
+    environment:
+      PORT: 3004
+      DATABASE_URL: postgresql://progress_user:progress_dev_pwd@postgres:5432/atlas?schema=progress_service
+      REDIS_HOST: redis
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - system-atlas-net
+
+  playground-service:
+    build:
+      context: .
+      dockerfile: services/playground-service/Dockerfile
+    container_name: atlas-playground-service
+    restart: unless-stopped
+    ports:
+      - "3005:3005"
+    env_file:
+      - services/playground-service/.env.example
+    environment:
+      PORT: 3005
+      DATABASE_URL: postgresql://playground_user:playground_dev_pwd@postgres:5432/atlas?schema=playground_service
+      REDIS_HOST: redis
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - system-atlas-net
+
+  interview-service:
+    build:
+      context: .
+      dockerfile: services/interview-service/Dockerfile
+    container_name: atlas-interview-service
+    restart: unless-stopped
+    ports:
+      - "3006:3006"
+    env_file:
+      - services/interview-service/.env.example
+    environment:
+      PORT: 3006
+      DATABASE_URL: postgresql://interview_user:interview_dev_pwd@postgres:5432/atlas?schema=interview_service
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - system-atlas-net
+
+  resource-service:
+    build:
+      context: .
+      dockerfile: services/resource-service/Dockerfile
+    container_name: atlas-resource-service
+    restart: unless-stopped
+    ports:
+      - "3007:3007"
+    env_file:
+      - services/resource-service/.env.example
+    environment:
+      PORT: 3007
+      DATABASE_URL: postgresql://resource_user:resource_dev_pwd@postgres:5432/atlas?schema=resource_service
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - system-atlas-net
+
+  organization-service:
+    build:
+      context: .
+      dockerfile: services/organization-service/Dockerfile
+    container_name: atlas-organization-service
+    restart: unless-stopped
+    ports:
+      - "3008:3008"
+    env_file:
+      - services/organization-service/.env.example
+    environment:
+      PORT: 3008
+      DATABASE_URL: postgresql://organization_user:organization_dev_pwd@postgres:5432/atlas?schema=organization_service
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - system-atlas-net
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: services/notification-service/Dockerfile
+    container_name: atlas-notification-service
+    restart: unless-stopped
+    ports:
+      - "3009:3009"
+    env_file:
+      - services/notification-service/.env.example
+    environment:
+      PORT: 3009
+      DATABASE_URL: postgresql://notification_user:notification_dev_pwd@postgres:5432/atlas?schema=notification_service
+      REDIS_HOST: redis
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - system-atlas-net
+
+  # ───────────── Frontend Application ─────────────
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    container_name: atlas-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - apps/web/.env.example
+    environment:
+      PORT: 3000
+      NEXT_PUBLIC_API_URL: http://api-gateway:3001
+    depends_on:
+      - api-gateway
+    networks:
+      - system-atlas-net

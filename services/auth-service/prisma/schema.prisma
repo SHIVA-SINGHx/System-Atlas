@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  STAFF
+  ADMIN
+}
+
+model User {
+  id                   String    @id @default(uuid()) @db.Uuid
+  clerkId              String    @unique
+  email                String    @unique
+  firstName            String?
+  lastName             String?
+  avatarUrl            String?
+  role                 UserRole  @default(USER)
+  activeOrganizationId String?   @db.Uuid
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  securityEvents       SecurityEvent[]
+
+  @@index([clerkId])
+  @@index([email])
+  @@map("users")
+}
+
+model SecurityEvent {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @db.Uuid
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eventType  String
+  ipAddress  String?
+  userAgent  String?
+  metadata   Json?
+  occurredAt DateTime @default(now())
+
+  @@index([userId, occurredAt])
+  @@map("security_events")
+}

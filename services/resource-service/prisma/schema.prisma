@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ResourceCategory {
+  ARTICLE
+  WHITE_PAPER
+  BOOK_REFERENCE
+  VIDEO_DEEP_DIVE
+  CASE_STUDY
+  TOOLING
+}
+
+model Resource {
+  id            String           @id @default(uuid()) @db.Uuid
+  title         String
+  description   String           @db.Text
+  url           String
+  category      ResourceCategory @default(ARTICLE)
+  author        String?
+  tags          String[]
+  publishedYear Int?
+  createdAt     DateTime         @default(now())
+
+  @@index([category])
+  @@index([tags])
+  @@map("resources")
+}

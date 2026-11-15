@@ -1,0 +1,17 @@
+name: Docker Image Verification
+
+on:
+  pull_request:
+    paths:
+      - 'services/**/Dockerfile'
+      - 'apps/**/Dockerfile'
+      - 'docker-compose.yml'
+
+jobs:
+  validate-docker:
+    name: Validate Dockerfiles
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Compose Config
+        run: docker compose config
