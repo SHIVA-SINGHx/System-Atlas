@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, use } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, CheckCircle2, Bookmark, Clock, ArrowRight } from 'lucide-react';
 
-export default function LessonReaderPage({ params }: { params: { topicSlug: string; lessonSlug: string } }) {
+export default function LessonReaderPage({ params }: { params: Promise<{ topicSlug: string; lessonSlug: string }> }) {
+  const { topicSlug, lessonSlug } = use(params);
   const [completed, setCompleted] = useState(false);
   const [bookmarked, setBookmarked] = useState(false);
 
@@ -12,7 +13,7 @@ export default function LessonReaderPage({ params }: { params: { topicSlug: stri
     <div className="max-w-4xl mx-auto px-6 py-10">
       {/* Navigation Breadcrumb */}
       <div className="flex items-center justify-between mb-8">
-        <Link href={`/learn/${params.topicSlug}`} className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white">
+        <Link href={`/learn/${topicSlug}`} className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white">
           <ArrowLeft className="w-4 h-4" /> Back to Module Lessons
         </Link>
         <button
@@ -30,10 +31,10 @@ export default function LessonReaderPage({ params }: { params: { topicSlug: stri
       {/* Lesson Header */}
       <div className="border-b border-slate-800 pb-6 mb-8">
         <span className="text-xs font-semibold uppercase tracking-wider text-sky-400">
-          {params.topicSlug.replace(/-/g, ' ')}
+          {topicSlug.replace(/-/g, ' ')}
         </span>
         <h1 className="text-3xl font-extrabold text-white mt-2 capitalize">
-          {params.lessonSlug.replace(/-/g, ' ')}
+          {lessonSlug.replace(/-/g, ' ')}
         </h1>
         <div className="flex items-center gap-4 mt-3 text-xs text-slate-400">
           <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> 20 min read</span>
@@ -96,10 +97,10 @@ export default function LessonReaderPage({ params }: { params: { topicSlug: stri
         </button>
 
         <Link
-          href={`/learn/${params.topicSlug}`}
+          href={`/learn/${topicSlug}`}
           className="flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-white"
         >
-          Next Lesson <ArrowRight className="w-4 h-4" />
+          Back to Module <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
     </div>

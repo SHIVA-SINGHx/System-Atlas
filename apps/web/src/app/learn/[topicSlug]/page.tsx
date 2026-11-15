@@ -15,9 +15,10 @@ const mockTopicDetails: Record<string, any> = {
   },
 };
 
-export default function TopicDetailPage({ params }: { params: { topicSlug: string } }) {
-  const topic = mockTopicDetails[params.topicSlug] || {
-    title: params.topicSlug.replace(/-/g, ' ').toUpperCase(),
+export default async function TopicDetailPage({ params }: { params: Promise<{ topicSlug: string }> }) {
+  const { topicSlug } = await params;
+  const topic = mockTopicDetails[topicSlug] || {
+    title: topicSlug.replace(/-/g, ' ').toUpperCase(),
     description: 'Comprehensive curriculum lessons on this topic.',
     level: 'INTERMEDIATE',
     lessons: [
@@ -44,7 +45,7 @@ export default function TopicDetailPage({ params }: { params: { topicSlug: strin
         {topic.lessons.map((lesson: any) => (
           <Link
             key={lesson.slug}
-            href={`/learn/${params.topicSlug}/${lesson.slug}`}
+            href={`/learn/${topicSlug}/${lesson.slug}`}
             className="p-4 rounded-xl border border-slate-800 bg-slate-900/50 hover:bg-slate-900 hover:border-slate-700 transition flex items-center justify-between"
           >
             <div className="flex items-center gap-3">

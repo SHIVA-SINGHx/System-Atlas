@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, use } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ChevronDown, ChevronUp, Lightbulb, CheckSquare, Building, AlertCircle } from 'lucide-react';
 
-export default function InterviewProblemWorkspace({ params }: { params: { slug: string } }) {
+export default function InterviewProblemWorkspace({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params);
   const [showHint1, setShowHint1] = useState(false);
   const [showHint2, setShowHint2] = useState(false);
 
@@ -25,7 +26,7 @@ export default function InterviewProblemWorkspace({ params }: { params: { slug: 
           </span>
         </div>
         <h1 className="text-3xl font-extrabold text-white capitalize">
-          {params.slug.replace(/-/g, ' ')}
+          {slug.replace(/-/g, ' ')}
         </h1>
       </div>
 

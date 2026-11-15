@@ -13,8 +13,9 @@ export class GatewayProxyController {
 
   @All(':service/*')
   async handleProxy(@Req() req: Request, @Res() res: Response) {
-    const serviceKey = req.params['service'];
-    const targetBase = this.proxyService.getTargetUrl(serviceKey || '');
+    const param = req.params['service'];
+    const serviceKey = (Array.isArray(param) ? param[0] : param) ?? '';
+    const targetBase = this.proxyService.getTargetUrl(serviceKey);
 
     if (!targetBase) {
       return res.status(HttpStatus.NOT_FOUND).json({
