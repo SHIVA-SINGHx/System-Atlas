@@ -10,6 +10,8 @@ volumes:
 
 services:
   # ───────────── Core Infrastructure ─────────────
+
+  #Postresql Database
   postgres:
     image: postgres:16-alpine
     container_name: atlas-postgres
@@ -32,6 +34,7 @@ services:
       retries: 5
       start_period: 10s
 
+#Redis container
   redis:
     image: redis:7-alpine
     container_name: atlas-redis
