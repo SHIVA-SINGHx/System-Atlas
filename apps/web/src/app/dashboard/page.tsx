@@ -16,6 +16,7 @@ import {
   Eye,
   Compass,
   Sparkles,
+  BookOpen,
 } from 'lucide-react';
 
 export default function UnifiedDashboardPage() {
