@@ -13,7 +13,9 @@ const isClerkConfigured = Boolean(
 const isPublicRoute = createRouteMatcher([
   '/',
   '/learn(.*)',
+  '/dsa(.*)',
   '/resources(.*)',
+  '/admin(.*)',
   '/interviews(.*)',
   '/playground(.*)',
   '/dashboard(.*)',
