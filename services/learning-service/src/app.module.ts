@@ -4,6 +4,7 @@ import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './health/health.module';
 import { TopicsModule } from './modules/topics/topics.module';
 import { LessonsModule } from './modules/lessons/lessons.module';
+import { DSAModule } from './modules/dsa/dsa.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { LessonsModule } from './modules/lessons/lessons.module';
     HealthModule,
     TopicsModule,
     LessonsModule,
+    DSAModule,
   ],
 })
 export class AppModule {}

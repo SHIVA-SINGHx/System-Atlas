@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { DifficultyLevelSchema } from '../learning';
+import { DifficultyLevelSchema } from '../common';
 
 export const InterviewProblemSchema = z.object({
   id: z.string().uuid(),
