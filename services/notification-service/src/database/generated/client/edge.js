@@ -150,7 +150,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\Coding\\System-Design-SaaS\\services\\notification-service\\src\\database\\generated\\client",
+      "value": "D:\\Coding\\System-Atlas\\services\\notification-service\\src\\database\\generated\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -164,11 +164,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\Coding\\System-Design-SaaS\\services\\notification-service\\prisma\\schema.prisma",
+    "sourceFilePath": "D:\\Coding\\System-Atlas\\services\\notification-service\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../../.env"
   },
   "relativePath": "../../../../prisma",

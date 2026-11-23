@@ -149,7 +149,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\Coding\\System-Design-SaaS\\services\\interview-service\\src\\database\\generated\\client",
+      "value": "D:\\Coding\\System-Atlas\\services\\interview-service\\src\\database\\generated\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -163,11 +163,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\Coding\\System-Design-SaaS\\services\\interview-service\\prisma\\schema.prisma",
+    "sourceFilePath": "D:\\Coding\\System-Atlas\\services\\interview-service\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../../.env"
   },
   "relativePath": "../../../../prisma",
