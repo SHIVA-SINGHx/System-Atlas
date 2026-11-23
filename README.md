@@ -78,11 +78,30 @@ The project is intentionally built as a **real-world microservices system** — 
 - User progress dashboard
 - **Sandboxed code execution** — JavaScript evaluated via isolated Node.js `vm` module; pattern-based verification for other languages; never executes in the main process
 
-### 🏗️ System Design Module (pre-existing)
-- Full System Design curriculum with original lessons
-- Architecture diagrams and workflow explanations
-- Engineering case studies
-- Interview preparation resources
+### 🏗️ System Design Mastery & FAANG Interview Platform
+- **8-Phase Interactive System Design Roadmap** (`/learn/roadmap`):
+  - Phase 1: Foundations & Requirements (Functional vs Non-Functional, Back-of-the-Envelope Math, 80/20 Pareto rule)
+  - Phase 2: Ingress & Network Routing (Anycast BGP, DNS, Push/Pull CDNs, Layer 4 vs Layer 7 Load Balancing, API Gateways)
+  - Phase 3: Database Selection, Sharding & Replication (SQL vs NoSQL, Quorum reads/writes, Consistent Hashing with Vnodes)
+  - Phase 4: Distributed Caching (Cache-Aside, Write-Through, Write-Behind, Eviction policies, Thundering Herd / Stampede prevention)
+  - Phase 5: Asynchronous Messaging & Event Streams (RabbitMQ/SQS vs Apache Kafka, consumer groups, idempotency keys)
+  - Phase 6: Distributed Consensus & CAP/PACELC (CAP theorem, PACELC, Two-Phase Commit, Raft, Distributed Locking with Redlock)
+  - Phase 7: Fault Tolerance & Resilience (Token/Leaky Bucket, Sliding Window Counter with Redis Lua, Circuit Breakers, Exponential Backoff + Jitter)
+  - Phase 8: The 4-Step FAANG Interview Framework (45-minute structured delivery blueprint from HelloInterview & Interviewing.io)
+- **FAANG System Design Case Studies** (`/interviews` & `/interviews/[slug]`):
+  - **Design TinyURL / URL Shortener**: Base62 encoding, Key Generation Service (KGS), 33 GB Redis LRU sizing, 301 vs 302 redirects
+  - **Design Instagram / Photo Sharing & Feed**: Hybrid Fan-out on Write/Read (Celebrity Problem), S3 pre-signed direct binary uploads, Redis Sorted Sets timelines
+  - **Design YouTube / Video Streaming**: Adaptive Bitrate Streaming (HLS 5-second chunking), asynchronous transcoding DAG worker pools, CDN edge distribution
+  - **Design WhatsApp / Real-Time Chat**: Persistent WebSockets, Gateway connection farm, Session Registry, Presence heartbeats, Cassandra message log
+  - **Design Distributed Rate Limiter**: Sliding Window Counter approximation, atomic Redis Lua scripts, fail-open policy, HTTP 429 headers
+  - **Design Notification Engine**: Priority Kafka queues (Transactional OTP vs Marketing), Redis idempotency deduplication, channel workers
+- **Interactive 6-Tab Case Study Workbench**:
+  - Requirements Scope (Functional, Non-Functional, Out of Scope)
+  - Capacity Estimation (Step-by-step QPS, daily bandwidth, 5-year storage, cache RAM calculations)
+  - High-Level Architecture (ASCII diagrams, component legend, read & write flows)
+  - API Design & Contracts (RESTful endpoints, request/response JSON schemas)
+  - Database Schema & Data Models (Primary keys, composite indexes, NoSQL/SQL choices)
+  - Deep Dives & FAANG Rubric (Hard scaling bottlenecks, senior/staff evaluation criteria, red flags)
 
 ### 📚 External Resource Library
 - **8+ curated engineering resources** including:
@@ -162,8 +181,13 @@ system-atlas/
 
 | Route | Description |
 |-------|-------------|
-| `/` | Landing page |
+| `/` | Landing page with animated hero & track spotlights |
 | `/dashboard` | Unified dashboard — System Design + DSA metrics |
+| `/learn` | System Design Curriculum Hub & 4-Step Framework |
+| `/learn/roadmap` | 8-Phase System Design Roadmap with progress tracking |
+| `/learn/[topicSlug]` | System Design topic lessons & architectural deep dives |
+| `/interviews` | FAANG System Design Interview Problem Bank |
+| `/interviews/[slug]` | Interactive 6-tab case study workbench (TinyURL, Instagram, YouTube, etc.) |
 | `/dsa` | DSA Hub — 13-topic grid overview |
 | `/dsa/roadmap` | Staged learning roadmap |
 | `/dsa/topics/[slug]` | Topic detail — 6 tabs: Guide, Dry Run, Code, Pitfalls, Interview, Quiz |
