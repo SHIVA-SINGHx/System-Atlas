@@ -21,7 +21,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-atlas_dev_password}
       POSTGRES_DB: atlas
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - atlas_postgres_data:/var/lib/postgresql/data
       - ./infrastructure/docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql

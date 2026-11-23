@@ -1,12 +1,15 @@
 # System Atlas - Start All Services
 # Run this from D:\Coding\System-Atlas
 
-Write-Host "🚀 Starting System Atlas..." -ForegroundColor Cyan
+Write-Host "🚀 Starting System Atlas (Host Mode)..." -ForegroundColor Cyan
 
 $root = $PSScriptRoot
 if (-not $root) { $root = "D:\Coding\System-Atlas" }
 
-# Services to start (name -> dir)
+$logsDir = Join-Path $root "logs"
+New-Item -ItemType Directory -Force -Path $logsDir | Out-Null
+
+# 1. Services to start
 $services = @(
   @{ name = "api-gateway";          dir = "services\api-gateway" },
   @{ name = "auth-service";         dir = "services\auth-service" },
@@ -21,41 +24,33 @@ $services = @(
 
 foreach ($svc in $services) {
   $svcDir = Join-Path $root $svc.dir
-  $logFile = Join-Path $root "logs\$($svc.name).log"
-  New-Item -ItemType Directory -Force -Path (Join-Path $root "logs") | Out-Null
+  $logFile = Join-Path $logsDir "$($svc.name).log"
 
-  Write-Host "  Starting $($svc.name) -> $logFile" -ForegroundColor Yellow
-  Start-Process powershell -ArgumentList @(
-    "-NoProfile", "-Command",
-    "Set-Location '$svcDir'; pnpm run dev *>&1 | Tee-Object -FilePath '$logFile'"
+  Write-Host "  Starting $($svc.name)..." -ForegroundColor Yellow
+  Start-Process cmd.exe -ArgumentList @(
+    "/c", "cd /d `"$svcDir`" && pnpm run dev > `"$logFile`" 2>&1"
   ) -WindowStyle Minimized
-  Start-Sleep -Milliseconds 300
+  Start-Sleep -Milliseconds 400
 }
 
 Write-Host ""
-Write-Host "  Starting web app -> logs\web.log" -ForegroundColor Yellow
+Write-Host "  Starting web app (Next.js)..." -ForegroundColor Yellow
 $webDir  = Join-Path $root "apps\web"
-$webLog  = Join-Path $root "logs\web.log"
-Start-Process powershell -ArgumentList @(
-  "-NoProfile", "-Command",
-  "Set-Location '$webDir'; pnpm run dev *>&1 | Tee-Object -FilePath '$webLog'"
+$webLog  = Join-Path $logsDir "web.log"
+Start-Process cmd.exe -ArgumentList @(
+  "/c", "cd /d `"$webDir`" && pnpm run dev > `"$webLog`" 2>&1"
 ) -WindowStyle Minimized
 
 Write-Host ""
-Write-Host "✅ All services launched in background windows." -ForegroundColor Green
+Write-Host "✅ All 10 services launched in background!" -ForegroundColor Green
 Write-Host ""
-Write-Host "Ports:" -ForegroundColor Cyan
-Write-Host "  Web App       http://localhost:3000"
-Write-Host "  API Gateway   http://localhost:3001"
-Write-Host "  Auth          http://localhost:3002"
-Write-Host "  Learning      http://localhost:3003"
-Write-Host "  Progress      http://localhost:3004"
-Write-Host "  Playground    http://localhost:3005"
-Write-Host "  Interview     http://localhost:3006"
-Write-Host "  Resource      http://localhost:3007"
-Write-Host "  Organization  http://localhost:3008"
-Write-Host "  Notification  http://localhost:3009"
+Write-Host "Live Endpoints in Your Browser:" -ForegroundColor Cyan
+Write-Host "  🌐 Web App:       http://localhost:3000"
+Write-Host "  ⚡ API Gateway:   http://localhost:3001/health"
+Write-Host "  📚 Learning API:  http://localhost:3003/dsa/topics"
+Write-Host "  🧪 Progress API:  http://localhost:3004/health"
+Write-Host "  📖 Resource API:  http://localhost:3007/resources"
 Write-Host ""
-Write-Host "Logs: $root\logs\" -ForegroundColor DarkGray
+Write-Host "Logs directory: $logsDir" -ForegroundColor DarkGray
 Write-Host ""
-Write-Host "Wait ~30s then visit http://localhost:3000" -ForegroundColor Cyan
+Write-Host "Wait ~15-20 seconds for TypeScript compilation, then open http://localhost:3000" -ForegroundColor Cyan

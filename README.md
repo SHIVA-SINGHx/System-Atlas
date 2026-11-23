@@ -223,7 +223,7 @@ NEXT_PUBLIC_API_URL=http://localhost:3001
 ### Step 3 — Start Docker Infrastructure
 
 ```bash
-# Start PostgreSQL (port 5432) + Redis (port 6379)
+# Start PostgreSQL (port 5433) + Redis (port 6379)
 docker compose up -d postgres redis
 ```
 
@@ -403,7 +403,7 @@ npx ts-node scripts/test-dsa-system.ts
 ### Infrastructure
 | Technology | Use |
 |-----------|-----|
-| PostgreSQL 16 | Primary database (per-service schemas) |
+| PostgreSQL 16 | Primary database (port 5433, per-service schemas) |
 | Redis 7 | Cache + rate limit store |
 | Docker Compose | Local infrastructure orchestration |
 | pnpm Workspaces | Monorepo management |
