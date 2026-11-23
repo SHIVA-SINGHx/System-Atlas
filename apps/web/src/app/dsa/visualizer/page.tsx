@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Navigation } from '@/components/navigation';
@@ -40,6 +40,20 @@ interface Step {
 }
 
 export default function DSAVisualizerPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center text-sm font-mono">
+          Loading visualizer engine...
+        </div>
+      }
+    >
+      <VisualizerContent />
+    </Suspense>
+  );
+}
+
+function VisualizerContent() {
   const searchParams = useSearchParams();
   const initialCategory = (searchParams.get('algo') as AlgorithmCategory) || 'sorting';
 

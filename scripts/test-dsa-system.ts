@@ -3,7 +3,6 @@ import assert from 'node:assert/strict';
 import {
   DSA_CURRICULUM,
   DSA_PRACTICE_PROBLEMS,
-  DSATopicData,
 } from '../packages/contracts/dist/learning/index.js';
 import { SSRFGuardService } from '../services/resource-service/dist/modules/ingestion/ssrf-guard.service.js';
 import { IngestionService } from '../services/resource-service/dist/modules/ingestion/ingestion.service.js';
